@@ -35,7 +35,7 @@ public class ProductionOrderEntity {
     @JoinColumn(name = "fk_requested_product_id")
     private ProductEntity requestedProduct;
 
-    // Estado de la orden de producción, puede ser 0. "pendiente", 2. "en proceso" o 3. "terminada"
+    // Estado de la orden de producción, puede ser 0. "pendiente", 1. "en proceso" o 2. "terminada"
     @Column(name = "status")
     private int status;
 

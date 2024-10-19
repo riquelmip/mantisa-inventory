@@ -1,15 +1,14 @@
 package com.mantisa.inventory.controller;
 
-import com.mantisa.inventory.model.ProductEntity;
-import com.mantisa.inventory.model.ProductionOrderDetailEntity;
-import com.mantisa.inventory.model.ProductionOrderEntity;
-import com.mantisa.inventory.model.UnitEntity;
+import com.mantisa.inventory.model.*;
+import com.mantisa.inventory.model.dto.AssignOrdenDTO;
 import com.mantisa.inventory.model.dto.CreateOrdenDTO;
 import com.mantisa.inventory.model.dto.CreateProductDTO;
 import com.mantisa.inventory.model.dto.OrderDetailDTO;
 import com.mantisa.inventory.repository.ProductionOrderDetailRepository;
 import com.mantisa.inventory.repository.UnitRepository;
 import com.mantisa.inventory.service.implementation.ProductServiceImpl;
+import com.mantisa.inventory.service.implementation.ProductionLineServiceImpl;
 import com.mantisa.inventory.service.implementation.ProductionOrderServiceImpl;
 import com.mantisa.inventory.util.ResponseObject;
 import jakarta.transaction.Transactional;
@@ -22,10 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -37,6 +33,8 @@ public class ProductionOrderController {
     private ProductServiceImpl productService;
     @Autowired
     private ProductionOrderDetailRepository productionOrderDetailRepository;
+    @Autowired
+    private ProductionLineServiceImpl productionLineService;
 
 //    @PostMapping("/create")
 //    public ResponseEntity<ResponseObject> create(@RequestBody CreateOrdenDTO createOrdenDTO) {
@@ -212,5 +210,71 @@ public class ProductionOrderController {
         return false; // Si pasa todas las validaciones, no es inválido
     }
 
+    @PostMapping("/assign-to-production-line")
+    public ResponseEntity<ResponseObject> assignToProductionLine(@RequestBody AssignOrdenDTO assignOrdenDTO) {
+        try {
+            ProductionOrderEntity productionOrder = productionOrderService.getById((long) assignOrdenDTO.getIdOrder());
+            ProductionLineTypeEntity productionLineType = productionLineService.getProductionLineTypeById((long) assignOrdenDTO.getFkProductionLineTypeId());
+
+            if (productionOrder == null) {
+                return ResponseObject.build(false, HttpStatus.BAD_REQUEST, "Production order not found", null);
+            }
+
+            if (productionLineType == null) {
+                return ResponseObject.build(false, HttpStatus.BAD_REQUEST, "Production line type not found", null);
+            }
+
+            if (productionOrder.getStatus() != 0) {
+                return ResponseObject.build(false, HttpStatus.BAD_REQUEST, "Production order is not pending", null);
+            }
+
+            productionOrder.setStatus(1); // 1: "en proceso"
+            productionOrderService.save(productionOrder);
+
+            // Crear la linea de producción
+            ProductionLineEntity productionLine = ProductionLineEntity.builder()
+                    .productionOrder(productionOrder)
+                    .startDate(new Date())
+                    .productionLineType(productionLineType)
+                    .status(1) // 1: "en producción"
+                    .build();
+
+            return ResponseObject.build(true, HttpStatus.OK, "Production order assigned to production line", productionOrder);
+        } catch (Exception e) {
+            return ResponseObject.build(false, HttpStatus.BAD_REQUEST, "Ocurró un error", e.getMessage());
+        }
+    }
+
+    @PostMapping("/finish-production")
+    public ResponseEntity<ResponseObject> finishProduction(@Param("id") Long productionLineId) {
+        try {
+            ProductionLineEntity productionLine = productionLineService.getById(productionLineId);
+
+            if (productionLine == null) {
+                return ResponseObject.build(false, HttpStatus.BAD_REQUEST, "Production line order not found", null);
+            }
+
+            if (productionLine.getStatus() != 1) {
+                return ResponseObject.build(false, HttpStatus.BAD_REQUEST, "Production line order is not in process", null);
+            }
+
+            productionLine.setStatus(2); // 2: "terminada"
+            productionLine.setEndDate(new Date());
+            productionLineService.save(productionLine);
+
+            ProductionOrderEntity productionOrder = productionLine.getProductionOrder();
+            productionOrder.setStatus(2); // 2: "terminada"
+            productionOrderService.save(productionOrder);
+
+            ProductEntity requestedProduct = productionOrder.getRequestedProduct();
+            // Actualizar stock
+            requestedProduct.setStock(requestedProduct.getStock() + productionOrder.getQuantity());
+            productService.save(requestedProduct);
+
+            return ResponseObject.build(true, HttpStatus.OK, "Production order finished", productionOrder);
+        } catch (Exception e) {
+            return ResponseObject.build(false, HttpStatus.BAD_REQUEST, "Ocurró un error", e.getMessage());
+        }
+    }
 
 }
