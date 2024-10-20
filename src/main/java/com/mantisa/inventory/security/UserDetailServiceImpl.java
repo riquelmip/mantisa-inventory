@@ -1,5 +1,6 @@
 package com.mantisa.inventory.security;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.mantisa.inventory.model.RoleEntity;
 import com.mantisa.inventory.model.UserEntity;
 import com.mantisa.inventory.model.dto.AuthCreateUserRequestDTO;
@@ -8,6 +9,7 @@ import com.mantisa.inventory.model.dto.AuthResponseDTO;
 import com.mantisa.inventory.repository.RoleRepository;
 import com.mantisa.inventory.repository.UserRepository;
 import com.mantisa.inventory.security.jwt.JwtUtils;
+import com.mantisa.inventory.util.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -131,5 +133,10 @@ public class UserDetailServiceImpl implements UserDetailsService {
         }
 
         return new UsernamePasswordAuthenticationToken(username, password, userDetails.getAuthorities());
+    }
+
+      public String validateToken(String token) {
+        String username = jwtUtils.extractUsername(jwtUtils.validateToken(token));
+        return username;
     }
 }

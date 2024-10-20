@@ -17,7 +17,7 @@ public class ProductionOrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "production_order_id")
-    private Long productId;
+    private Long productionOrderId;
 
     @Column(name = "order_number")
     private int orderNumber;

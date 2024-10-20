@@ -1,10 +1,7 @@
 package com.mantisa.inventory.controller;
 
 import com.mantisa.inventory.model.*;
-import com.mantisa.inventory.model.dto.AssignOrdenDTO;
-import com.mantisa.inventory.model.dto.CreateOrdenDTO;
-import com.mantisa.inventory.model.dto.CreateProductDTO;
-import com.mantisa.inventory.model.dto.OrderDetailDTO;
+import com.mantisa.inventory.model.dto.*;
 import com.mantisa.inventory.repository.ProductionOrderDetailRepository;
 import com.mantisa.inventory.repository.UnitRepository;
 import com.mantisa.inventory.service.implementation.ProductServiceImpl;
@@ -35,77 +32,6 @@ public class ProductionOrderController {
     private ProductionOrderDetailRepository productionOrderDetailRepository;
     @Autowired
     private ProductionLineServiceImpl productionLineService;
-
-//    @PostMapping("/create")
-//    public ResponseEntity<ResponseObject> create(@RequestBody CreateOrdenDTO createOrdenDTO) {
-//        try {
-//            int lastOrderNumber = productionOrderService.findLastOrderNumber();
-//            int newOrderNumber = lastOrderNumber + 1;
-//
-//            if (createOrdenDTO.getCustomer() == null || createOrdenDTO.getCustomer().isEmpty())
-//                return ResponseObject.build(false, HttpStatus.BAD_REQUEST, "Customer is required", null);
-//
-//            if (createOrdenDTO.getFkRequestedProductId() == 0)
-//                return ResponseObject.build(false, HttpStatus.BAD_REQUEST, "Requested product is required", null);
-//
-//            if (createOrdenDTO.getQuantity() == 0)
-//                return ResponseObject.build(false, HttpStatus.BAD_REQUEST, "Quantity is required", null);
-//
-//            if (createOrdenDTO.getDeliveryDate() == null)
-//                return ResponseObject.build(false, HttpStatus.BAD_REQUEST, "Delivery date is required", null);
-//
-//            if (createOrdenDTO.getOrderDetails().isEmpty())
-//                return ResponseObject.build(false, HttpStatus.BAD_REQUEST, "Order details are required", null);
-//
-//            ProductEntity requestedProduct = productService.getById((long) createOrdenDTO.getFkRequestedProductId());
-//            if (requestedProduct == null)
-//                return ResponseObject.build(false, HttpStatus.BAD_REQUEST, "Requested product not found", null);
-//
-//            ProductionOrderEntity productionOrderEntity = ProductionOrderEntity.builder()
-//                    .orderNumber(newOrderNumber)
-//                    .customerName(createOrdenDTO.getCustomer())
-//                    .requestedProduct(requestedProduct)
-//                    .quantity(createOrdenDTO.getQuantity())
-//                    .deliveryDate(createOrdenDTO.getDeliveryDate())
-//                    .status(0) // 0. "pendiente"
-//                    .build();
-//
-//            ProductionOrderEntity productionOrderCreated = productionOrderService.save(productionOrderEntity);
-//
-//            List<OrderDetailDTO> orderDetails = createOrdenDTO.getOrderDetails();
-//            List<ProductionOrderDetailEntity> productionOrderDetails = List.of();
-//            for (OrderDetailDTO orderDetail : orderDetails) {
-//                ProductEntity product = productService.getById((long) orderDetail.getProductId());
-//                if (product == null)
-//                    return ResponseObject.build(false, HttpStatus.BAD_REQUEST, "Product not found", null);
-//
-//                // Validate if product is in stock
-//                if (product.getStock() < orderDetail.getQuantity())
-//                    return ResponseObject.build(false, HttpStatus.BAD_REQUEST, "Product " + product.getName() + " out of stock", null);
-//
-//                productionOrderDetails.add(ProductionOrderDetailEntity.builder()
-//                        .product(product)
-//                        .quantity(orderDetail.getQuantity())
-//                        .productionOrder(productionOrderCreated)
-//                        .build());
-//            }
-//
-//            // Save order details
-//            productionOrderDetailRepository.saveAll(productionOrderDetails);
-//
-//            // Update stock
-//            for (ProductionOrderDetailEntity productionOrderDetail : productionOrderDetails) {
-//                ProductEntity product = productionOrderDetail.getProduct();
-//                product.setStock(product.getStock() - productionOrderDetail.getQuantity());
-//                productService.save(product);
-//            }
-//
-//            return ResponseObject.build(true, HttpStatus.OK, "Production order created successfully", productionOrderCreated);
-//        } catch (Exception e) {
-//            return ResponseObject.build(false, HttpStatus.BAD_REQUEST, "Ocurró un error", e.getMessage());
-//        }
-//    }
-
 
     @PostMapping("/create")
     @Transactional // Asegura que todas las operaciones se realicen como una transacción
@@ -179,7 +105,31 @@ public class ProductionOrderController {
     @PostMapping("/get-all")
     public ResponseEntity<ResponseObject> getAll() {
         try {
-            return ResponseObject.build(true, HttpStatus.OK, "Products retrieved successfully", productionOrderService.getAll());
+            List<ProductionOrderEntity> productionOrders = productionOrderService.getAll();
+            List<ProductionOrderDTO> productionOrderDTOs = productionOrders.stream()
+                    .map(productionOrder -> {
+                        Set<OrderDetailDTO> orderDetailDTOS = productionOrder.getOrderDetails().stream()
+                                .map(orderDetail -> OrderDetailDTO.builder()
+                                        .productId(orderDetail.getProduct().getProductId())
+                                        .quantity(orderDetail.getQuantity())
+                                        .build())
+                                .collect(Collectors.toSet());
+
+                        return ProductionOrderDTO.builder()
+                                .productionOrderId(productionOrder.getProductionOrderId())
+                                .orderNumber(productionOrder.getOrderNumber())
+                                .customerName(productionOrder.getCustomerName())
+                                .deliveryDate(productionOrder.getDeliveryDate())
+                                .quantity(productionOrder.getQuantity())
+                                .fkRequestedProductId(productionOrder.getRequestedProduct().getProductId())
+                                .requestedProductName(productionOrder.getRequestedProduct().getName())
+                                .status(productionOrder.getStatus())
+                                .orderDetails(orderDetailDTOS)
+                                .build();
+                    })
+                    .collect(Collectors.toList());
+
+            return ResponseObject.build(true, HttpStatus.OK, "Productions Orders retrieved successfully", productionOrderDTOs);
         } catch (Exception e) {
             return ResponseObject.build(false, HttpStatus.BAD_REQUEST, "Ocurró un error", e.getMessage());
         }
@@ -239,14 +189,16 @@ public class ProductionOrderController {
                     .status(1) // 1: "en producción"
                     .build();
 
-            return ResponseObject.build(true, HttpStatus.OK, "Production order assigned to production line", productionOrder);
+            ProductionLineEntity productionLineCreated = productionLineService.save(productionLine);
+
+            return ResponseObject.build(true, HttpStatus.OK, "Production order assigned to production line", productionLineCreated);
         } catch (Exception e) {
             return ResponseObject.build(false, HttpStatus.BAD_REQUEST, "Ocurró un error", e.getMessage());
         }
     }
 
     @PostMapping("/finish-production")
-    public ResponseEntity<ResponseObject> finishProduction(@Param("id") Long productionLineId) {
+    public ResponseEntity<ResponseObject> finishProduction(@Param("productionLineId") Long productionLineId) {
         try {
             ProductionLineEntity productionLine = productionLineService.getById(productionLineId);
 
@@ -272,6 +224,26 @@ public class ProductionOrderController {
             productService.save(requestedProduct);
 
             return ResponseObject.build(true, HttpStatus.OK, "Production order finished", productionOrder);
+        } catch (Exception e) {
+            return ResponseObject.build(false, HttpStatus.BAD_REQUEST, "Ocurró un error", e.getMessage());
+        }
+    }
+
+    @PostMapping("/get-all-productions-lines-types")
+    public ResponseEntity<ResponseObject> getAllProductionLinesTypes() {
+        try {
+            List<ProductionLineTypeEntity> productionLineTypes = productionLineService.getAllProductionLineTypes();
+            return ResponseObject.build(true, HttpStatus.OK, "Production lines types retrieved successfully", productionLineTypes);
+        } catch (Exception e) {
+            return ResponseObject.build(false, HttpStatus.BAD_REQUEST, "Ocurró un error", e.getMessage());
+        }
+    }
+
+    @PostMapping("/get-all-production-lines")
+    public ResponseEntity<ResponseObject> getAllProductionLines() {
+        try {
+            List<ProductionLineEntity> productionLines = productionLineService.getAll();
+            return ResponseObject.build(true, HttpStatus.OK, "Production lines retrieved successfully", productionLines);
         } catch (Exception e) {
             return ResponseObject.build(false, HttpStatus.BAD_REQUEST, "Ocurró un error", e.getMessage());
         }

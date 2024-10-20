@@ -73,5 +73,10 @@ public class UserServiceImpl implements IUserService {
         return isDeleted;
     }
 
+    @Override
+    public UserEntity findByUsername(String username) {
+        return userRepository.findUserEntityByUsername(username).orElse(null);
+    }
+
 
 }

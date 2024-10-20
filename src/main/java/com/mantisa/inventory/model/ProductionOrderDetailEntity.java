@@ -1,5 +1,6 @@
 package com.mantisa.inventory.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,10 +19,12 @@ public class ProductionOrderDetailEntity {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_production_order_id", nullable = false)
+    @JsonIgnore
     private ProductionOrderEntity productionOrder;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_product_id", nullable = false)
+    @JsonIgnore
     private ProductEntity product;
 
     @Column(name = "quantity")

@@ -18,6 +18,9 @@ public class ProductServiceImpl implements IProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private UnitRepository unitRepository;
+
     @Override
     public ProductEntity save(ProductEntity productEntity) {
         return productRepository.save(productEntity);
@@ -57,6 +60,16 @@ public class ProductServiceImpl implements IProductService {
     List<ProductEntity> s = productRepository.saveAll(productEntityList);
     return s;
 }
+
+    @Override
+    public List<UnitEntity> getAllUnits() {
+        return unitRepository.findAll();
+    }
+
+    @Override
+    public List<ProductEntity> getAllByProductType(int productType) {
+        return productRepository.getAllByProductType(productType);
+    }
 
 
 }

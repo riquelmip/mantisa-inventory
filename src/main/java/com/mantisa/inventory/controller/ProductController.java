@@ -128,4 +128,22 @@ public class ProductController {
         }
     }
 
+    @PostMapping("/get-all-units")
+    public ResponseEntity<ResponseObject> getAllUnits() {
+        try {
+            return ResponseObject.build(true, HttpStatus.OK, "Units retrieved successfully", productService.getAllUnits());
+        } catch (Exception e) {
+            return ResponseObject.build(false, HttpStatus.BAD_REQUEST, "Ocurró un error", e.getMessage());
+        }
+    }
+
+    @PostMapping("/get-all-by-type")
+    public ResponseEntity<ResponseObject> getAllByType(@Param("type") int type) {
+        try {
+            return ResponseObject.build(true, HttpStatus.OK, "Products retrieved successfully", productService.getAllByProductType(type));
+        } catch (Exception e) {
+            return ResponseObject.build(false, HttpStatus.BAD_REQUEST, "Ocurró un error", e.getMessage());
+        }
+    }
+
 }

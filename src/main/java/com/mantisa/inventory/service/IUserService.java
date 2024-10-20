@@ -15,4 +15,6 @@ public interface IUserService {
 
     boolean deleteUserById(Long userId);
 
+    UserEntity findByUsername(String username);
+
 }
