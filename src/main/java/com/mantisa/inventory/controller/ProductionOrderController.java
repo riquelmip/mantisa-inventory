@@ -9,21 +9,28 @@ import com.mantisa.inventory.service.implementation.ProductionLineServiceImpl;
 import com.mantisa.inventory.service.implementation.ProductionOrderServiceImpl;
 import com.mantisa.inventory.util.ResponseObject;
 import jakarta.transaction.Transactional;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/admin/production-orders")
 public class ProductionOrderController {
+    private final Logger log = org.slf4j.LoggerFactory.getLogger(ProductionOrderController.class);
     @Autowired
     private ProductionOrderServiceImpl productionOrderService;
     @Autowired
@@ -246,6 +253,60 @@ public class ProductionOrderController {
             return ResponseObject.build(true, HttpStatus.OK, "Production lines retrieved successfully", productionLines);
         } catch (Exception e) {
             return ResponseObject.build(false, HttpStatus.BAD_REQUEST, "Ocurró un error", e.getMessage());
+        }
+    }
+
+//    @PostMapping("/get-orders-report")
+//    public ResponseEntity<ResponseObject> getOrdersReport(@Param("status") int status, @Param("deliveryDate") String deliveryDate) {
+//        try {
+//            List<OrdersReportDTO> ordersReport = productionOrderService.getOrdersReport(status, deliveryDate);
+//            return ResponseObject.build(true, HttpStatus.OK, "Orders report retrieved successfully", ordersReport);
+//        } catch (Exception e) {
+//            log.debug("Error getting orders report", e);
+//            return ResponseObject.build(false, HttpStatus.BAD_REQUEST, "Ocurró un error", e.getMessage());
+//        }
+//    }
+
+    @PostMapping("/get-orders-report")
+    public ResponseEntity<byte[]> getOrdersReport(@Param("status") int status, @Param("deliveryDate") String deliveryDate) {
+        try {
+
+            if (status < 0 || status > 2) {
+                return ResponseEntity.badRequest().body(null);
+            }
+
+            if (deliveryDate == null || deliveryDate.isEmpty()) {
+                return ResponseEntity.badRequest().body(null);
+            }
+
+            // Llama al servicio para obtener los datos del reporte
+            List<OrdersReportDTO> ordersReport = productionOrderService.getOrdersReport(status, deliveryDate);
+
+            
+
+            // Ruta del archivo .jrxml
+            InputStream reportStream = getClass().getResourceAsStream("/reports/orders_report.jrxml");
+            // Compila el archivo .jrxml
+            JasperReport jasperReport = JasperCompileManager.compileReport(reportStream);
+
+            // Llenar el reporte con los datos
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(ordersReport);
+            Map<String, Object> parameters = new HashMap<>(); // Si necesitas parámetros, agrégales aquí
+
+            // Llenar el reporte
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+
+            // Exportar el reporte a PDF
+            byte[] pdfReport = JasperExportManager.exportReportToPdf(jasperPrint);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("attachment", "orders_report.pdf");
+
+            return new ResponseEntity<>(pdfReport, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 

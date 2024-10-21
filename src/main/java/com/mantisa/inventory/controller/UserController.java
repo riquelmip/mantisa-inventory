@@ -52,4 +52,20 @@ public class UserController {
         }
     }
 
+    @PostMapping("/get-by-username")
+    public ResponseEntity<ResponseObject> getUserByUsername(@Param("username") String username) {
+        try {
+            UserEntity user = userService.findByUsername(username);
+            if (user == null) {
+                return ResponseObject.build(false, HttpStatus.NOT_FOUND, "User not found", null);
+            }
+
+            user.setPassword(null);
+            return ResponseObject.build(true, HttpStatus.OK, "User retrieved successfully", user);
+        } catch (Exception e) {
+            return ResponseObject.build(false, HttpStatus.BAD_REQUEST, "Ocurró un error", e.getMessage());
+        }
+    }
+
+
 }

@@ -1,0 +1,25 @@
+# IMAGEN BASE
+FROM eclipse-temurin:21.0.3_9-jdk
+
+# INFORMAR EL PUERTO DONDE SE EJECUTA EL CONTENEDOR (INFORMATIVO)
+EXPOSE 8080
+
+# DEFINIR DIRECTORIO RAIZ DE NUESTRO CONTENEDOR
+WORKDIR /root
+
+# INSTALAR MAVEN EN EL CONTENEDOR
+RUN apt-get update && apt-get install -y maven
+
+# COPIAR Y PEGAR ARCHIVOS DENTRO DEL CONTENEDOR
+COPY ./pom.xml /root
+COPY ./.mvn /root/.mvn
+COPY ./src /root/src
+
+# DESCARGAR LAS DEPENDENCIAS
+RUN mvn dependency:go-offline
+
+# CONSTRUIR NUESTRA APLICACION
+RUN mvn clean install -DskipTests
+
+# LEVANTAR NUESTRA APLICACION CUANDO EL CONTENEDOR INICIE
+ENTRYPOINT ["java", "-jar", "/root/target/mantisa-inventory-0.0.1-SNAPSHOT.jar"]

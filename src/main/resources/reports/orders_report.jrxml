@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.2.final using JasperReports Library version 6.21.2-8434a0bd7c3bbc37cbf916f2968d35e4b165821a  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="TotalizedSpeedingViolationsReport" pageWidth="1191" pageHeight="842" orientation="Landscape" columnWidth="1151" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="8090fd27-d486-4776-8589-b9779f97412b">
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style backcolor="#F0F5FA"/>
+		</conditionalStyle>
+	</style>
+	<subDataset name="graphDataSet" uuid="b16c2d6f-84e9-4788-9db1-f44353f921ec">
+		<field name="serie" class="java.lang.String"/>
+		<field name="category" class="java.lang.String"/>
+		<field name="value" class="java.lang.Double"/>
+	</subDataset>
+	<field name="order_number" class="java.lang.String"/>
+	<field name="customer_name" class="java.lang.String"/>
+	<field name="delivery_date" class="java.lang.String"/>
+	<field name="start_date" class="java.lang.String"/>
+	<field name="end_date" class="java.lang.String"/>
+	<field name="status" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="113" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="1151" height="42" backcolor="#ECECEC" uuid="2229e159-6bc8-4f7e-b55e-42bb736dedda"/>
+				<staticText>
+					<reportElement x="280" y="6" width="600" height="30" uuid="b165674d-c215-4830-9860-3d57d5a8ba4c"/>
+					<textElement textAlignment="Center">
+						<font fontName="SansSerif" size="22" isBold="true"/>
+					</textElement>
+					<text><![CDATA[REPORTE DE ORDENES DE PRODUCCIÓN]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="83" width="1150" height="30" backcolor="#53534A" uuid="e599371e-9968-404d-87f2-fd68d4fd9ced">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<staticText>
+					<reportElement x="0" y="0" width="80" height="30" forecolor="#FFFFFF" uuid="bfc67808-a15d-46da-9606-b0e5ad23463e"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[NO. ORDEN]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="80" y="0" width="300" height="30" forecolor="#FFFFFF" uuid="00a24aa3-0caf-47fd-a02f-5d1d42a83c94"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[CLIENTE]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="380" y="0" width="200" height="30" forecolor="#FFFFFF" uuid="f00dafc4-e01e-4af5-8192-79d2cdb97cab"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[FECHA DE ENTREGA ESPERADA]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="580" y="0" width="200" height="30" forecolor="#FFFFFF" uuid="2cca8cc4-e63d-42fa-9812-26f785c274fd"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[FECHA DE INGRESO A PRODUCCIÓN]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="780" y="0" width="200" height="30" forecolor="#FFFFFF" uuid="df08cf69-c43c-4c00-8178-b53d341a17d7"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[FECHA DE FINALIZACIÓN EN PRODUCCIÓN]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="980" y="0" width="170" height="30" forecolor="#FFFFFF" uuid="bd6fbf41-07e6-4a68-a18d-201ba6ceacc6"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[ESTADO]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<detail>
+		<band height="43" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="6" width="1151" height="30" isPrintWhenDetailOverflows="true" backcolor="#FFFFFF" uuid="8a805d4c-ca5b-43a0-aea6-15ed26a8f19a">
+					<property name="net.sf.jasperreports.export.html.class" value=""/>
+				</reportElement>
+				<textField>
+					<reportElement x="0" y="0" width="80" height="30" isPrintWhenDetailOverflows="true" uuid="4650888f-38c7-4c04-98b6-88ac472091b9">
+						<property name="net.sf.jasperreports.export.html.class" value="searchable"/>
+					</reportElement>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{order_number}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="80" y="0" width="300" height="30" isPrintWhenDetailOverflows="true" uuid="2ff67f62-4f0f-45bf-9ea2-082d35092ac3">
+						<property name="net.sf.jasperreports.export.html.class" value="searchable"/>
+					</reportElement>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{customer_name}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="380" y="0" width="200" height="30" isPrintWhenDetailOverflows="true" uuid="014cb438-a1bc-4c8c-b7ad-67fb432e043e"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{delivery_date} == null ? "" : $F{delivery_date}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="580" y="0" width="200" height="30" isPrintWhenDetailOverflows="true" uuid="0895be13-4793-4d60-98d1-3d3bbd136a7e"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{start_date} == null ? "" : $F{start_date}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="780" y="0" width="200" height="30" isPrintWhenDetailOverflows="true" uuid="78f03e0d-baa5-40a5-aea8-8d90a5eed4bd"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{end_date} == null ? "" : $F{end_date}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="980" y="0" width="170" height="30" isPrintWhenDetailOverflows="true" uuid="1adb8f50-99dd-4b7b-8909-3331f1336d56"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+</jasperReport>

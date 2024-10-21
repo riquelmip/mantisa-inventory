@@ -50,7 +50,11 @@ public class SecurityConfig {
                     http.requestMatchers(HttpMethod.POST, "/api/public/**").permitAll();
 
                     // ENDPOINTS PRIVADOS
-                    http.requestMatchers(HttpMethod.POST, "/api/admin/**").hasAnyRole("ADMIN");
+                    http.requestMatchers(HttpMethod.POST, "/api/admin/users/get-by-username**").hasAnyRole("ADMIN", "WAREHOUSE", "PRODUCTION");
+                    http.requestMatchers(HttpMethod.POST, "/api/admin/products/**").hasAnyRole("WAREHOUSE", "ADMIN");
+                    http.requestMatchers(HttpMethod.POST, "/api/admin/production-orders/**").hasAnyRole("PRODUCTION", "ADMIN");
+                    http.requestMatchers(HttpMethod.POST, "/api/admin/**").hasRole("ADMIN");
+
 
                     // Configurar el resto de endpoint - NO ESPECIFICADOS
                     http.anyRequest().denyAll();

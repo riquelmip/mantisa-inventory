@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+
+  spring-api-image:
+    image: mantisa-inventory
+    container_name: mantisa-inventory-container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - spring-network
+
+
+networks:
+  spring-network:
+volumes:
+  mysql-volume:
