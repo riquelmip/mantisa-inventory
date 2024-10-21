@@ -1,10 +1,5 @@
 # Employee Technical Test
 
-## Descripción
-
-Este proyecto es una API de gestión de empleados que utiliza Spring Boot y QueryDSL para interactuar con una base de
-datos. Permite realizar operaciones CRUD sobre los empleados.
-
 ## Requisitos Previos
 
 Asegúrate de tener instalados los siguientes requisitos en tu máquina:
