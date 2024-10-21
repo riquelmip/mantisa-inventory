@@ -47,49 +47,49 @@
 				<staticText>
 					<reportElement x="0" y="0" width="80" height="30" forecolor="#FFFFFF" uuid="bfc67808-a15d-46da-9606-b0e5ad23463e"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="11" isBold="true"/>
+						<font fontName="SansSerif" size="11" isBold="true"/>
 					</textElement>
 					<text><![CDATA[CODIGO]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="80" y="0" width="200" height="30" forecolor="#FFFFFF" uuid="00a24aa3-0caf-47fd-a02f-5d1d42a83c94"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="11" isBold="true"/>
+						<font fontName="SansSerif" size="11" isBold="true"/>
 					</textElement>
 					<text><![CDATA[PRODUCTO]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="280" y="0" width="200" height="30" forecolor="#FFFFFF" uuid="f00dafc4-e01e-4af5-8192-79d2cdb97cab"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="11" isBold="true"/>
+						<font fontName="SansSerif" size="11" isBold="true"/>
 					</textElement>
 					<text><![CDATA[DESCRIPCION]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="480" y="0" width="200" height="30" forecolor="#FFFFFF" uuid="2cca8cc4-e63d-42fa-9812-26f785c274fd"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="11" isBold="true"/>
+						<font fontName="SansSerif" size="11" isBold="true"/>
 					</textElement>
 					<text><![CDATA[TIPO]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="680" y="0" width="200" height="30" forecolor="#FFFFFF" uuid="df08cf69-c43c-4c00-8178-b53d341a17d7"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="11" isBold="true"/>
+						<font fontName="SansSerif" size="11" isBold="true"/>
 					</textElement>
 					<text><![CDATA[UNIDAD]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="980" y="0" width="170" height="30" forecolor="#FFFFFF" uuid="bd6fbf41-07e6-4a68-a18d-201ba6ceacc6"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="11" isBold="true"/>
+						<font fontName="SansSerif" size="11" isBold="true"/>
 					</textElement>
 					<text><![CDATA[ESTADO]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="880" y="0" width="100" height="30" forecolor="#FFFFFF" uuid="f942a3eb-2cd8-4a45-a80f-9f697a369404"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="11" isBold="true"/>
+						<font fontName="SansSerif" size="11" isBold="true"/>
 					</textElement>
 					<text><![CDATA[CANTIDAD DISPONIBLE]]></text>
 				</staticText>
@@ -108,7 +108,7 @@
 						<property name="net.sf.jasperreports.export.html.class" value="searchable"/>
 					</reportElement>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="11"/>
+						<font fontName="SansSerif" size="11"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{code}]]></textFieldExpression>
 				</textField>
@@ -117,42 +117,42 @@
 						<property name="net.sf.jasperreports.export.html.class" value="searchable"/>
 					</reportElement>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="11"/>
+						<font fontName="SansSerif" size="11"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="280" y="0" width="200" height="30" isPrintWhenDetailOverflows="true" uuid="014cb438-a1bc-4c8c-b7ad-67fb432e043e"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="11"/>
+						<font fontName="SansSerif" size="11"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{description} == null ? "" : $F{description}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="480" y="0" width="200" height="30" isPrintWhenDetailOverflows="true" uuid="0895be13-4793-4d60-98d1-3d3bbd136a7e"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="11"/>
+						<font fontName="SansSerif" size="11"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{productType}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="680" y="0" width="200" height="30" isPrintWhenDetailOverflows="true" uuid="78f03e0d-baa5-40a5-aea8-8d90a5eed4bd"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="11"/>
+						<font fontName="SansSerif" size="11"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{unitName}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="880" y="0" width="100" height="30" isPrintWhenDetailOverflows="true" uuid="fc3ecaca-7e19-4244-a268-e6c16183ac69"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="11" isUnderline="false"/>
+						<font fontName="SansSerif" size="11" isUnderline="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{stock}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="980" y="0" width="170" height="30" isPrintWhenDetailOverflows="true" uuid="1adb8f50-99dd-4b7b-8909-3331f1336d56"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="11"/>
+						<font fontName="SansSerif" size="11"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
 				</textField>

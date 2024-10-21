@@ -46,42 +46,42 @@
 				<staticText>
 					<reportElement x="0" y="0" width="80" height="30" forecolor="#FFFFFF" uuid="bfc67808-a15d-46da-9606-b0e5ad23463e"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="11" isBold="true"/>
+						<font fontName="SansSerif" size="11" isBold="true"/>
 					</textElement>
 					<text><![CDATA[NO. ORDEN]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="80" y="0" width="300" height="30" forecolor="#FFFFFF" uuid="00a24aa3-0caf-47fd-a02f-5d1d42a83c94"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="11" isBold="true"/>
+						<font fontName="SansSerif" size="11" isBold="true"/>
 					</textElement>
 					<text><![CDATA[CLIENTE]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="380" y="0" width="200" height="30" forecolor="#FFFFFF" uuid="f00dafc4-e01e-4af5-8192-79d2cdb97cab"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="11" isBold="true"/>
+						<font fontName="SansSerif" size="11" isBold="true"/>
 					</textElement>
 					<text><![CDATA[FECHA DE ENTREGA ESPERADA]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="580" y="0" width="200" height="30" forecolor="#FFFFFF" uuid="2cca8cc4-e63d-42fa-9812-26f785c274fd"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="11" isBold="true"/>
+						<font fontName="SansSerif" size="11" isBold="true"/>
 					</textElement>
 					<text><![CDATA[FECHA DE INGRESO A PRODUCCIÓN]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="780" y="0" width="200" height="30" forecolor="#FFFFFF" uuid="df08cf69-c43c-4c00-8178-b53d341a17d7"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="11" isBold="true"/>
+						<font fontName="SansSerif" size="11" isBold="true"/>
 					</textElement>
 					<text><![CDATA[FECHA DE FINALIZACIÓN EN PRODUCCIÓN]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="980" y="0" width="170" height="30" forecolor="#FFFFFF" uuid="bd6fbf41-07e6-4a68-a18d-201ba6ceacc6"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="11" isBold="true"/>
+						<font fontName="SansSerif" size="11" isBold="true"/>
 					</textElement>
 					<text><![CDATA[ESTADO]]></text>
 				</staticText>
@@ -100,7 +100,7 @@
 						<property name="net.sf.jasperreports.export.html.class" value="searchable"/>
 					</reportElement>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="11"/>
+						<font fontName="SansSerif" size="11"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{order_number}]]></textFieldExpression>
 				</textField>
@@ -109,35 +109,35 @@
 						<property name="net.sf.jasperreports.export.html.class" value="searchable"/>
 					</reportElement>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="11"/>
+						<font fontName="SansSerif" size="11"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{customer_name}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="380" y="0" width="200" height="30" isPrintWhenDetailOverflows="true" uuid="014cb438-a1bc-4c8c-b7ad-67fb432e043e"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="11"/>
+						<font fontName="SansSerif" size="11"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{delivery_date} == null ? "" : $F{delivery_date}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="580" y="0" width="200" height="30" isPrintWhenDetailOverflows="true" uuid="0895be13-4793-4d60-98d1-3d3bbd136a7e"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="11"/>
+						<font fontName="SansSerif" size="11"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{start_date} == null ? "" : $F{start_date}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="780" y="0" width="200" height="30" isPrintWhenDetailOverflows="true" uuid="78f03e0d-baa5-40a5-aea8-8d90a5eed4bd"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="11"/>
+						<font fontName="SansSerif" size="11"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{end_date} == null ? "" : $F{end_date}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="980" y="0" width="170" height="30" isPrintWhenDetailOverflows="true" uuid="1adb8f50-99dd-4b7b-8909-3331f1336d56"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" size="11"/>
+						<font fontName="SansSerif" size="11"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
 				</textField>
