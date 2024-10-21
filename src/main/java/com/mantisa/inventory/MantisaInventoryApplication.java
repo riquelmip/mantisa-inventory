@@ -1,30 +1,23 @@
 package com.mantisa.inventory;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.util.Map;
 
 @SpringBootApplication
 public class MantisaInventoryApplication {
 
     public static void main(String[] args) {
-        System.out.println("SPRING_PROFILES_ACTIVE: " + System.getenv("SPRING_PROFILES_ACTIVE"));
-        System.out.println("SPRING_DATASOURCE_HOST: " + System.getenv("SPRING_DATASOURCE_HOST"));
-        System.out.println("SPRING_DATASOURCE_PORT: " + System.getenv("SPRING_DATASOURCE_PORT"));
-        System.out.println("SPRING_DATASOURCE_USERNAME: " + System.getenv("SPRING_DATASOURCE_USERNAME"));
-        System.out.println("SPRING_DATASOURCE_PASSWORD: " + System.getenv("SPRING_DATASOURCE_PASSWORD"));
+        // Cargar las variables de entorno desde el archivo .env
+        Dotenv dotenv = Dotenv.load();
 
+        // Se pueden usar las variables, pero no es necesario si no se usan
+        String host = dotenv.get("SPRING_DATASOURCE_HOST");
+        String port = dotenv.get("SPRING_DATASOURCE_PORT");
 
-        String profile = System.getenv("SPRING_PROFILES_ACTIVE");
-        if (profile != null && !profile.isEmpty()) {
-            System.out.println("Profile active: " + profile);
-            System.setProperty("spring.profiles.active", profile);
-        } else {
-            System.out.println("No profile active, using default.");
-        }
+        System.out.println("Database host: " + host);
+        System.out.println("Database port: " + port);
 
         SpringApplication.run(MantisaInventoryApplication.class, args);
     }
-
 }
